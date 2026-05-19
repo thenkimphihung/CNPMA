@@ -1,0 +1,451 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Mộc Coffee - Modern Edition</title>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Outfit:wght@400;600;700&display=swap" rel="stylesheet" />
+  <style>
+    /* ── RESET & VARIABLES ── */
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    
+    :root {
+      --primary: #1e3932; /* Deep Forest Green (Modern Starbucks-ish) */
+      --accent: #d4a373;  /* Soft Terracotta */
+      --bg-light: #f8f9fa;
+      --text-main: #2d3436;
+      --text-muted: #636e72;
+      --white: #ffffff;
+      --border: #edf2f7;
+      --radius: 12px;
+      --font-body: 'Inter', sans-serif;
+      --font-heading: 'Outfit', sans-serif;
+    }
+
+    body {
+      font-family: var(--font-body);
+      background: var(--bg-light);
+      color: var(--text-main);
+      line-height: 1.6;
+    }
+
+    /* ── NAVIGATION ── */
+    nav {
+      background: var(--white);
+      padding: 0 5%;
+      height: 75px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      box-shadow: 0 2px 15px rgba(0,0,0,0.04);
+      position: sticky;
+      top: 0;
+      z-index: 1000;
+    }
+    .logo-wrap { display: flex; align-items: center; gap: 10px; text-decoration: none; }
+    .logo-name { 
+        font-family: var(--font-heading); 
+        font-size: 24px; 
+        font-weight: 700; 
+        color: var(--primary);
+        letter-spacing: -0.5px;
+    }
+    .nav-links { display: flex; gap: 8px; }
+    .nav-btn {
+      border: none;
+      background: transparent;
+      padding: 10px 20px;
+      border-radius: 30px;
+      font-weight: 600;
+      font-size: 14px;
+      color: var(--text-muted);
+      cursor: pointer;
+      transition: 0.3s;
+    }
+    .nav-btn.active {
+      background: var(--primary);
+      color: var(--white);
+    }
+
+    /* ── HERO ── */
+    .hero {
+      padding: 80px 5%;
+      background: var(--white);
+      text-align: center;
+      border-bottom: 1px solid var(--border);
+    }
+    .hero h1 {
+      font-family: var(--font-heading);
+      font-size: 42px;
+      color: var(--primary);
+      margin-bottom: 15px;
+    }
+    .hero p { color: var(--text-muted); font-size: 18px; max-width: 600px; margin: 0 auto; }
+
+    /* ── FILTERS ── */
+    .filter-section {
+      padding: 30px 5%;
+      max-width: 1300px;
+      margin: 0 auto;
+      display: flex;
+      flex-direction: column;
+      gap: 20px;
+    }
+    .search-container { position: relative; width: 100%; max-width: 400px; }
+    .search-input {
+      width: 100%;
+      padding: 12px 20px 12px 45px;
+      border-radius: 50px;
+      border: 1px solid var(--border);
+      background: var(--white);
+      outline: none;
+      font-size: 15px;
+    }
+    .search-icon { position: absolute; left: 18px; top: 13px; color: var(--text-muted); }
+    
+    .cat-list { display: flex; gap: 10px; flex-wrap: wrap; }
+    .cat-pill {
+      padding: 8px 22px;
+      border-radius: 50px;
+      border: 1px solid var(--border);
+      background: var(--white);
+      font-size: 13px;
+      font-weight: 500;
+      cursor: pointer;
+      transition: 0.2s;
+    }
+    .cat-pill.active { background: var(--accent); color: var(--white); border-color: var(--accent); }
+
+    /* ── PRODUCT GRID ── */
+    .grid-container { padding: 0 5% 60px; max-width: 1300px; margin: 0 auto; }
+    .product-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+      gap: 30px;
+    }
+    .product-card {
+      background: var(--white);
+      border-radius: var(--radius);
+      overflow: hidden;
+      transition: transform 0.3s, box-shadow 0.3s;
+      border: 1px solid var(--border);
+    }
+    .product-card:hover {
+      transform: translateY(-8px);
+      box-shadow: 0 15px 35px rgba(0,0,0,0.08);
+    }
+    .card-img { width: 100%; height: 220px; object-fit: cover; }
+    .card-content { padding: 20px; }
+    .card-category { font-size: 11px; font-weight: 700; text-transform: uppercase; color: var(--accent); margin-bottom: 8px; display: block; }
+    .card-title { font-family: var(--font-heading); font-size: 20px; font-weight: 700; margin-bottom: 10px; }
+    .card-desc { font-size: 14px; color: var(--text-muted); height: 45px; overflow: hidden; margin-bottom: 20px; }
+    .card-footer { display: flex; justify-content: space-between; align-items: center; padding-top: 15px; border-top: 1px solid var(--border); }
+    .card-price { font-weight: 700; color: var(--primary); font-size: 18px; }
+
+    /* ── ADMIN PANEL ── */
+    .admin-container { padding: 40px 5%; max-width: 1300px; margin: 0 auto; }
+    .admin-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 30px; }
+    .table-card { background: var(--white); border-radius: var(--radius); border: 1px solid var(--border); overflow: hidden; box-shadow: 0 4px 6px rgba(0,0,0,0.02); }
+    table { width: 100%; border-collapse: collapse; }
+    th { background: #fcfcfc; padding: 15px 20px; text-align: left; font-size: 12px; font-weight: 700; color: var(--text-muted); text-transform: uppercase; border-bottom: 1px solid var(--border); }
+    td { padding: 15px 20px; border-bottom: 1px solid var(--border); font-size: 14px; }
+    .status-badge { padding: 4px 12px; border-radius: 20px; font-size: 11px; font-weight: 600; }
+    .status-available { background: #e6f4ea; color: #1e7e34; }
+    .status-out { background: #fce8e8; color: #d93025; }
+
+    /* ── BUTTONS ── */
+    .btn-primary { background: var(--primary); color: var(--white); border: none; padding: 12px 25px; border-radius: 8px; font-weight: 600; cursor: pointer; }
+    .action-btn { padding: 6px 12px; border-radius: 6px; border: 1px solid var(--border); background: var(--white); cursor: pointer; font-size: 12px; font-weight: 600; }
+    .btn-edit { color: #2980b9; }
+    .btn-delete { color: #c0392b; }
+
+    /* ── MODAL ── */
+    .overlay { position: fixed; inset: 0; background: rgba(0,0,0,0.5); display: none; align-items: center; justify-content: center; z-index: 2000; backdrop-filter: blur(4px); }
+    .overlay.open { display: flex; }
+    .modal { background: var(--white); padding: 40px; border-radius: var(--radius); width: 100%; max-width: 500px; max-height: 90vh; overflow-y: auto; }
+    .form-group { margin-bottom: 20px; }
+    .form-label { display: block; font-size: 13px; font-weight: 600; margin-bottom: 8px; }
+    .form-control { width: 100%; padding: 12px; border-radius: 8px; border: 1px solid var(--border); outline: none; }
+    
+    .page { display: none; }
+    .page.visible { display: block; }
+  </style>
+</head>
+<body>
+
+<nav>
+  <a class="logo-wrap" href="#">
+    <span style="font-size: 24px;">🌱</span>
+    <div class="logo-name">MỘC COFFEE</div>
+  </a>
+  <div class="nav-links">
+    <button class="nav-btn active" onclick="showPage('customer')">Menu</button>
+    <button class="nav-btn" onclick="showPage('admin')">Quản trị</button>
+  </div>
+</nav>
+
+<!-- ══ CUSTOMER PAGE ══ -->
+<div id="page-customer" class="page visible">
+  <div class="hero">
+    <h1>Hương Vị Nguyên Bản</h1>
+    <p>Trải nghiệm cà phê rang mộc, giữ trọn nét tinh túy từ cao nguyên Việt Nam.</p>
+  </div>
+
+  <div class="filter-section">
+    <div class="search-container">
+      <span class="search-icon">🔍</span>
+      <input class="search-input" id="search-input" type="text" placeholder="Tìm tên thức uống..." oninput="renderProducts()" />
+    </div>
+    <div class="cat-list">
+      <button class="cat-pill active" data-cat="all" onclick="filterByCat('all',this)">Tất cả</button>
+      <button class="cat-pill" data-cat="1" onclick="filterByCat('1',this)">Pha máy</button>
+      <button class="cat-pill" data-cat="2" onclick="filterByCat('2',this)">Truyền thống</button>
+      <button class="cat-pill" data-cat="3" onclick="filterByCat('3',this)">Trà trái cây</button>
+      <button class="cat-pill" data-cat="4" onclick="filterByCat('4',this)">Khác</button>
+    </div>
+  </div>
+
+  <div class="grid-container">
+    <div class="product-grid" id="product-grid"></div>
+    <div id="empty-msg" style="display:none; text-align: center; padding: 40px; color: var(--text-muted);">Không tìm thấy sản phẩm yêu cầu.</div>
+  </div>
+</div>
+
+<!-- ══ ADMIN PAGE ══ -->
+<div id="page-admin" class="page">
+  <div class="admin-container">
+    <div class="admin-header">
+      <div>
+        <h2 style="font-family: var(--font-heading);">Quản lý Menu</h2>
+        <p id="admin-sub" style="font-size: 13px; color: var(--text-muted);">8 món trong danh sách</p>
+      </div>
+      <button class="btn-primary" onclick="openAddModal()">+ Thêm món mới</button>
+    </div>
+
+    <div class="table-card">
+      <table>
+        <thead>
+          <tr>
+            <th>Sản phẩm</th>
+            <th>Danh mục</th>
+            <th>Giá bán</th>
+            <th>Trạng thái</th>
+            <th>Thao tác</th>
+          </tr>
+        </thead>
+        <tbody id="admin-tbody"></tbody>
+      </table>
+    </div>
+  </div>
+</div>
+
+<!-- ══ MODAL FORM ══ -->
+<div class="overlay" id="modal-form">
+  <div class="modal">
+    <h2 id="modal-title" style="margin-bottom: 5px; font-family: var(--font-heading);">Thêm món</h2>
+    <p id="modal-sub" style="font-size: 13px; color: var(--text-muted); margin-bottom: 25px;">Điền thông tin chi tiết bên dưới</p>
+    
+    <div class="form-group">
+      <label class="form-label">Tên món</label>
+      <input class="form-control" id="f-name" type="text" />
+    </div>
+    <div class="form-group">
+      <label class="form-label">Giá bán (VNĐ)</label>
+      <input class="form-control" id="f-price" type="number" />
+    </div>
+    <div class="form-group">
+      <label class="form-label">Mô tả</label>
+      <textarea class="form-control" id="f-desc" rows="3"></textarea>
+    </div>
+    <div class="form-group">
+        <label class="form-label">Hình ảnh</label>
+        <input type="file" id="f-file" class="form-control" accept="image/*" onchange="previewImage(event)" />
+        <img id="f-preview" style="width: 100%; height: 150px; object-fit: cover; border-radius: 8px; margin-top: 10px; display: none;" />
+    </div>
+    <div class="form-group">
+      <label class="form-label">Danh mục</label>
+      <select class="form-control" id="f-cat">
+        <option value="1">Cà phê pha máy</option>
+        <option value="2">Cà phê truyền thống</option>
+        <option value="3">Trà trái cây</option>
+        <option value="4">Khác</option>
+      </select>
+    </div>
+    <div class="form-group">
+        <label class="form-label">Trạng thái</label>
+        <select class="form-control" id="f-status">
+          <option value="available">Còn hàng</option>
+          <option value="out_of_stock">Hết hàng</option>
+        </select>
+      </div>
+
+    <div style="display: flex; gap: 10px; margin-top: 30px;">
+      <button class="btn-primary" id="btn-save" style="flex: 2;" onclick="handleSave()">Lưu lại</button>
+      <button class="action-btn" style="flex: 1;" onclick="closeModal('modal-form')">Hủy bỏ</button>
+    </div>
+  </div>
+</div>
+
+<!-- ══ SCRIPT ══ -->
+<script>
+// Dữ liệu và logic giữ nguyên từ bản cũ nhưng render theo class mới
+const cats = {
+  1: { name: "Pha máy", icon: "☕" },
+  2: { name: "Truyền thống", icon: "🫖" },
+  3: { name: "Trà trái cây", icon: "🍵" },
+  4: { name: "Khác", icon: "🥤" },
+};
+
+let products = [
+  { id:1, name:"Espresso", price:35000, description:"Tinh chất cà phê đậm đặc, thơm nồng từ hạt Arabica.", image_url:"https://images.unsplash.com/photo-1510591509098-f4fdc6d0ff04?w=600&q=80", category_id:1, status:"available" },
+  { id:2, name:"Cappuccino", price:55000, description:"Sự kết hợp hoàn hảo giữa Espresso và bọt sữa mịn.", image_url:"https://images.unsplash.com/photo-1572442388796-11668a67e53d?w=600&q=80", category_id:1, status:"available" },
+  { id:6, name:"Trà đào cam sả", price:45000, description:"Thanh mát, sảng khoái với miếng đào tươi mọng.", image_url:"https://images.unsplash.com/photo-1556679343-c7306c1976bc?w=600&q=80", category_id:3, status:"available" },
+  { id:5, name:"Cà phê sữa đá", price:30000, description:"Cà phê phin đậm đà quyện cùng sữa đặc béo ngậy.", image_url:"https://images.unsplash.com/photo-1568649929103-28ffbefaca1e?w=600&q=80", category_id:2, status:"available" },
+];
+
+let nextId = 7;
+let currentCat = "all";
+let editingId = null;
+let currentUploadedImage = "";
+
+const fmt = p => new Intl.NumberFormat("vi-VN").format(p) + " đ";
+
+function showPage(name) {
+  document.querySelectorAll(".page").forEach(el => el.classList.remove("visible"));
+  document.getElementById("page-" + name).classList.add("visible");
+  document.querySelectorAll(".nav-btn").forEach(b => b.classList.remove("active"));
+  event.target.classList.add("active");
+  if (name === "admin") renderAdmin();
+}
+
+function filterByCat(cat, el) {
+  currentCat = cat;
+  document.querySelectorAll(".cat-pill").forEach(b => b.classList.remove("active"));
+  el.classList.add("active");
+  renderProducts();
+}
+
+function renderProducts() {
+  const q = document.getElementById("search-input").value.toLowerCase();
+  const list = products.filter(p => 
+    (currentCat === "all" || p.category_id === Number(currentCat)) &&
+    p.name.toLowerCase().includes(q)
+  );
+  
+  const grid = document.getElementById("product-grid");
+  grid.innerHTML = list.map(p => `
+    <div class="product-card">
+      <img src="${p.image_url}" class="card-img" alt="${p.name}">
+      <div class="card-content">
+        <span class="card-category">${cats[p.category_id].name}</span>
+        <h3 class="card-title">${p.name}</h3>
+        <p class="card-desc">${p.description}</p>
+        <div class="card-footer">
+          <span class="card-price">${fmt(p.price)}</span>
+          <span class="status-badge ${p.status==='available'?'status-available':'status-out'}">
+            ${p.status==='available'?'● Còn hàng':'○ Hết'}
+          </span>
+        </div>
+      </div>
+    </div>
+  `).join("");
+}
+
+function renderAdmin() {
+  const tbody = document.getElementById("admin-tbody");
+  tbody.innerHTML = products.map(p => `
+    <tr>
+      <td>
+        <div style="display:flex; align-items:center; gap:10px">
+          <img src="${p.image_url}" style="width:40px; height:40px; border-radius:6px; object-fit:cover">
+          <span style="font-weight:600">${p.name}</span>
+        </div>
+      </td>
+      <td>${cats[p.category_id].name}</td>
+      <td style="font-weight:600">${fmt(p.price)}</td>
+      <td><span class="status-badge ${p.status==='available'?'status-available':'status-out'}">${p.status==='available'?'Còn hàng':'Hết hàng'}</span></td>
+      <td>
+        <button class="action-btn btn-edit" onclick="openEditModal(${p.id})">Sửa</button>
+        <button class="action-btn btn-delete" onclick="deleteProduct(${p.id})">Xóa</button>
+      </td>
+    </tr>
+  `).join("");
+}
+
+function previewImage(event) {
+  const file = event.target.files[0];
+  if (file) {
+    const reader = new FileReader();
+    reader.onload = e => {
+      currentUploadedImage = e.target.result;
+      const preview = document.getElementById("f-preview");
+      preview.src = e.target.result;
+      preview.style.display = "block";
+    };
+    reader.readAsDataURL(file);
+  }
+}
+
+function openAddModal() {
+  editingId = null;
+  currentUploadedImage = "";
+  document.getElementById("modal-form").classList.add("open");
+  document.getElementById("f-preview").style.display = "none";
+  // clear form fields...
+}
+
+function closeModal(id) { document.getElementById(id).classList.remove("open"); }
+
+function handleSave() {
+  const name = document.getElementById("f-name").value;
+  const price = document.getElementById("f-price").value;
+  if(!name || !price) return alert("Vui lòng nhập tên và giá");
+
+  const newItem = {
+    id: editingId || nextId++,
+    name,
+    price: Number(price),
+    description: document.getElementById("f-desc").value,
+    image_url: currentUploadedImage || "https://images.unsplash.com/photo-1495474472287-4d71bcdd2085?w=600&q=80",
+    category_id: Number(document.getElementById("f-cat").value),
+    status: document.getElementById("f-status").value
+  };
+
+  if(editingId) {
+    const index = products.findIndex(p => p.id === editingId);
+    products[index] = newItem;
+  } else {
+    products.push(newItem);
+  }
+
+  closeModal("modal-form");
+  renderAdmin();
+  renderProducts();
+}
+
+function deleteProduct(id) {
+    if(confirm("Bạn có chắc muốn xóa món này?")) {
+        products = products.filter(p => p.id !== id);
+        renderAdmin();
+        renderProducts();
+    }
+}
+
+function openEditModal(id) {
+    editingId = id;
+    const p = products.find(x => x.id === id);
+    document.getElementById("f-name").value = p.name;
+    document.getElementById("f-price").value = p.price;
+    document.getElementById("f-desc").value = p.description;
+    document.getElementById("f-cat").value = p.category_id;
+    document.getElementById("f-status").value = p.status;
+    document.getElementById("f-preview").src = p.image_url;
+    document.getElementById("f-preview").style.display = "block";
+    currentUploadedImage = p.image_url;
+    document.getElementById("modal-form").classList.add("open");
+}
+
+renderProducts();
+</script>
+</body>
+</html>
